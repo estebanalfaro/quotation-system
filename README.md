@@ -21,8 +21,16 @@ It helps reduce manual calculation and improves the organization of quotation da
 ## 🌐 Live Demo
 https://estebanalfaro.github.io/quotation-system/
 
-## 📷 Preview
-(Add screenshots here)
+## 📷 Project Screenshots
+
+### Main page
+![Main page](images/screenshot-1.png)
+
+### Quotation form
+![Form](images/screenshot-2.png)
+
+### Result
+![Result](images/screenshot-3.png)
 
 ## 📁 Project Structure
 - index.html
