@@ -1,0 +1,283 @@
+# CONTEXTO (C)
+
+La empresa TechSoluciones CR necesita desarrollar una aplicación web de cotizaciones para uso interno del equipo de ventas.
+
+Actualmente los vendedores ingresan información manualmente, lo que provoca errores humanos en cálculos, descuentos, impuestos y totales finales. El objetivo principal es automatizar el proceso de cotización para reducir errores, agilizar el trabajo de los vendedores y estandarizar las reglas de negocio.
+
+La aplicación debe permitir crear cotizaciones automáticamente a partir de productos, cantidades, tipos de cliente y descuentos autorizados.
+
+El sistema también debe controlar:
+- estados de cotización,
+- autorizaciones,
+- historial de cambios,
+- vigencia,
+- generación de PDF.
+
+--------------------------------------------------
+
+# TAREA (T)
+
+Desarrollar una aplicación web de cotizaciones en html, css, y js que permita a los vendedores:
+
+1. Seleccionar productos.
+2. Ingresar cantidades.
+3. Seleccionar el tipo de cliente.
+4. Seleccionar el vendedor.
+5. Aplicar descuentos permitidos según reglas de negocio.
+6. Calcular automáticamente:
+   - subtotal,
+   - descuentos,
+   - IVA,
+   - total final.
+7. Generar una cotización en PDF cuando el vendedor lo solicite.
+8. Controlar estados y vigencia de las cotizaciones.
+9. Guardar historial completo de cambios y acciones realizadas.
+
+--------------------------------------------------
+
+# PRODUCTOS DISPONIBLES
+
+Los productos y servicios disponibles son:
+
+| Producto | Precio |
+|---|---|
+| Laptop básica | ₡385.000 |
+| Laptop premium | ₡895.000 |
+| Monitor de 24 pulgadas | ₡185.000 |
+| Kit de teclado y mouse inalámbrico | ₡45.000 |
+| Impresora multifuncional | ₡320.000 |
+| Servicio de instalación de equipo | ₡35.000 |
+| Mantenimiento preventivo anual | ₡85.000 |
+
+Notas:
+- El servicio de instalación se cobra por cada equipo instalado.
+- El mantenimiento preventivo anual también se cobra por equipo.
+- Los precios solo pueden ser modificados por Silvia Corrales.
+
+--------------------------------------------------
+
+# REGLAS DE NEGOCIO (R)
+
+## Tipos de cliente y descuentos
+
+### Clientes nuevos
+- No reciben descuento base.
+
+### Clientes frecuentes
+- Reciben un 10% de descuento sobre el subtotal de la cotización.
+
+### Clientes corporativos
+- Reciben un 15% de descuento sobre el subtotal de la cotización.
+
+Restricción:
+- Solo uno de estos descuentos puede aplicarse por cotización.
+
+--------------------------------------------------
+
+## Descuento por volumen
+
+Cuando el subtotal de la cotización excede ₡1.000.000 antes del IVA:
+
+- Se aplica un descuento adicional del 5%.
+
+Restricciones:
+- El descuento por volumen NO se combina con el descuento corporativo.
+- Clientes nuevos y frecuentes sí pueden recibir el descuento por volumen.
+- El descuento por volumen se calcula sobre el subtotal de la cotización.
+
+--------------------------------------------------
+
+## Descuentos por tipo de vendedor
+
+### Vendedor junior
+- Puede aplicar un descuento adicional de hasta 5%.
+
+### Vendedor senior
+- Puede aplicar un descuento adicional de hasta 10%.
+
+Reglas:
+- El descuento adicional del vendedor se aplica al final de todos los descuentos anteriores.
+- El sistema no debe mostrar públicamente si el vendedor es junior o senior el lo debería de elegir.
+- Si un vendedor intenta aplicar un descuento mayor al permitido:
+  - la cotización debe pasar automáticamente al estado “Pendiente de aprobación”.
+  - no debe poder continuar hasta ser aprobada.
+
+--------------------------------------------------
+
+## Aprobaciones
+
+Las cotizaciones pendientes deben ser aprobadas por Silvia Corrales.
+
+La aprobación puede mostrarse simplemente mediante un indicador o marca de:
+- “Aprobado”.
+
+Si una cotización aprobada es editada nuevamente:
+- debe regresar automáticamente al estado:
+  - “Pendiente de aprobación”.
+
+--------------------------------------------------
+
+## IVA
+
+- El IVA es del 13%.
+- El IVA debe calcularse después de aplicar todos los descuentos.
+- No existen excepciones a esta regla.
+
+--------------------------------------------------
+
+# REQUISITOS DE LA COTIZACIÓN
+
+Cada cotización debe incluir:
+
+- Número único:
+  - Ejemplos:
+    - COT-001
+    - COT-002
+    - COT-003
+- Fecha de creación.
+- Fecha de vencimiento.
+- Nombre del cliente.
+- Empresa del cliente.
+- Teléfono del cliente.
+- Nombre del vendedor.
+- Estado de la cotización.
+- Lista detallada de productos:
+  - producto,
+  - cantidad,
+  - precio unitario,
+  - subtotal por línea.
+- Descuentos aplicados:
+  - descripción,
+  - porcentaje,
+  - monto descontado.
+- IVA calculado.
+- Total final.
+
+--------------------------------------------------
+
+# GENERACIÓN DE PDF
+
+La aplicación debe permitir generar una cotización en formato PDF.
+
+El PDF debe incluir:
+- logotipo o nombre de la empresa,
+- número de cotización,
+- fecha,
+- fecha de vencimiento,
+- datos del cliente,
+- datos del vendedor,
+- tabla detallada de productos,
+- descuentos aplicados,
+- IVA,
+- total final,
+- estado de la cotización.
+
+El PDF solo debe generarse cuando el vendedor lo solicite.
+
+--------------------------------------------------
+
+# ESTADOS DE LA COTIZACIÓN
+
+La aplicación debe manejar los siguientes estados:
+
+| Estado | Descripción |
+|---|---|
+| Borrador | Puede editarse |
+| Enviada | No puede editarse |
+| Pendiente de aprobación | Requiere aprobación |
+| Invalidada | Cotización vencida |
+| Eliminada | Cotización eliminada |
+
+--------------------------------------------------
+
+# VIGENCIA
+
+- Todas las cotizaciones tienen una vigencia de 15 días desde su creación.
+- Cuando una cotización exceda ese tiempo:
+  - debe marcarse automáticamente como “Invalidada”.
+
+--------------------------------------------------
+
+# ELIMINACIÓN DE COTIZACIONES
+
+- Las cotizaciones no deben eliminarse inmediatamente.
+- Deben pasar primero al estado:
+  - “Eliminada”.
+
+--------------------------------------------------
+
+# HISTORIAL Y AUDITORÍA
+
+El sistema debe guardar historial completo de todas las acciones realizadas sobre una cotización.
+
+Ejemplos:
+- creación,
+- edición,
+- cambios de estado,
+- descuentos modificados,
+- aprobaciones,
+- eliminación,
+- generación de PDF.
+
+--------------------------------------------------
+
+# VALIDACIONES
+
+El sistema debe validar lo siguiente:
+
+- No permitir cantidades negativas.
+- No permitir cotizaciones sin productos.
+- No permitir avanzar una cotización pendiente sin aprobación.
+- No permitir editar cotizaciones enviadas sin autorización.
+- Si una cotización aprobada se modifica:
+  - debe volver automáticamente a “Pendiente de aprobación”.
+- Los campos del cliente son obligatorios:
+  - nombre,
+  - empresa,
+  - teléfono.
+
+--------------------------------------------------
+
+# EJEMPLOS Y EXPECTATIVAS (E)
+
+## Ejemplo de numeración
+
+- COT-001
+- COT-002
+- COT-003
+
+--------------------------------------------------
+
+## Ejemplo esperado de desglose
+
+La cotización debe mostrar claramente:
+
+1. Productos seleccionados.
+2. Cantidades.
+3. Precio unitario.
+4. Subtotal.
+5. Descuentos aplicados.
+6. IVA.
+7. Total final.
+8. Estado.
+9. Fecha de vencimiento.
+
+--------------------------------------------------
+
+## Ejemplo de flujo esperado
+
+1. El vendedor crea la cotización.
+2. El sistema calcula automáticamente:
+   - subtotal,
+   - descuentos,
+   - IVA,
+   - total final.
+3. Si el descuento excede lo permitido:
+   - la cotización pasa a:
+     - “Pendiente de aprobación”.
+4. Silvia Corrales aprueba la cotización.
+5. El vendedor genera el PDF.
+6. La cotización queda lista para enviarse al cliente.
+
+--------------------------------------------------
+

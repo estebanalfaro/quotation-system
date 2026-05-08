@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechSoluciones CR - Sistema de Cotizaciones</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="no-print">
+        <div class="container">
+            <h1>TechSoluciones CR</h1>
+            <p>Sistema Interno de Cotizaciones</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Formulario de Datos Básicos -->
+        <section id="quote-setup" class="card no-print">
+            <h2>Datos de la Cotización</h2>
+            <div class="grid">
+                <div class="form-group">
+                    <label for="client-name">Nombre del Cliente:</label>
+                    <input type="text" id="client-name" placeholder="Ej: Juan Pérez" required>
+                </div>
+                <div class="form-group">
+                    <label for="client-company">Empresa:</label>
+                    <input type="text" id="client-company" placeholder="Ej: Bufete Jurídico" required>
+                </div>
+                <div class="form-group">
+                    <label for="client-phone">Teléfono:</label>
+                    <input type="tel" id="client-phone" placeholder="Ej: 8888-8888" required>
+                </div>
+                <div class="form-group">
+                    <label for="client-type">Tipo de Cliente:</label>
+                    <select id="client-type">
+                        <option value="nuevo">Nuevo (0%)</option>
+                        <option value="frecuente">Frecuente (10%)</option>
+                        <option value="corporativo">Corporativo (15%)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="vendor-name">Vendedor:</label>
+                    <input type="text" id="vendor-name" placeholder="Tu nombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="vendor-role">Rol del Vendedor:</label>
+                    <select id="vendor-role">
+                        <option value="junior">Junior (Max 5% desc.)</option>
+                        <option value="senior">Senior (Max 10% desc.)</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- Selección de Productos -->
+        <section id="product-selection" class="card no-print">
+            <h2>Agregar Productos</h2>
+            <div class="flex-row">
+                <div class="form-group flex-grow">
+                    <label for="product-list">Producto/Servicio:</label>
+                    <select id="product-list">
+                        <!-- Se llenará dinámicamente con JS -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="product-quantity">Cantidad:</label>
+                    <input type="number" id="product-quantity" value="1" min="1">
+                </div>
+                <button id="add-product-btn" class="btn-primary">Agregar</button>
+            </div>
+        </section>
+
+        <!-- Detalle de la Cotización (Vista Previa y PDF) -->
+        <section id="quote-preview" class="card">
+            <div class="quote-header">
+                <div class="company-info">
+                    <h3>TechSoluciones CR</h3>
+                    <p>Especialistas en IT y Soporte Técnico</p>
+                </div>
+                <div class="quote-meta">
+                    <p><strong>Cotización:</strong> <span id="quote-number">COT-000</span></p>
+                    <p><strong>Fecha:</strong> <span id="quote-date">--/--/----</span></p>
+                    <p><strong>Vence:</strong> <span id="quote-expiry">--/--/----</span></p>
+                    <p><strong>Estado:</strong> <span id="quote-status" class="badge">Borrador</span></p>
+                </div>
+            </div>
+
+            <div class="client-details">
+                <p><strong>Cliente:</strong> <span id="display-client">---</span></p>
+                <p><strong>Empresa:</strong> <span id="display-company">---</span></p>
+                <p><strong>Vendedor:</strong> <span id="display-vendor">---</span></p>
+            </div>
+
+            <table id="items-table">
+                <thead>
+                    <tr>
+                        <th>Descripción</th>
+                        <th>Cant.</th>
+                        <th>Precio Unit.</th>
+                        <th>Subtotal</th>
+                        <th class="no-print">Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="items-body">
+                    <!-- Se llenará con JS -->
+                </tbody>
+            </table>
+
+            <div class="totals-container">
+                <div class="extra-discount no-print">
+                    <label for="vendor-discount">Descuento Adicional del Vendedor (%):</label>
+                    <input type="number" id="vendor-discount" value="0" min="0" max="100" step="0.1">
+                </div>
+                
+                <div class="totals-grid">
+                    <p>Subtotal:</p> <p id="total-subtotal">₡0</p>
+                    <p>Desc. Cliente:</p> <p id="total-client-discount">₡0</p>
+                    <p>Desc. Volumen:</p> <p id="total-volume-discount">₡0</p>
+                    <p>Desc. Vendedor:</p> <p id="total-vendor-discount">₡0</p>
+                    <p>IVA (13%):</p> <p id="total-iva">₡0</p>
+                    <p class="grand-total">TOTAL FINAL:</p> <p id="total-grand" class="grand-total">₡0</p>
+                </div>
+            </div>
+
+            <div id="approval-notice" class="alert hidden">
+                ⚠️ Esta cotización requiere aprobación de Silvia Corrales por exceder el descuento permitido.
+            </div>
+        </section>
+
+        <!-- Botones de Acción -->
+        <div class="actions no-print">
+            <button id="save-quote-btn" class="btn-secondary">Guardar como Borrador</button>
+            <button id="print-pdf-btn" class="btn-success">Generar PDF / Imprimir</button>
+            <button id="approve-btn" class="btn-warning hidden">Aprobar (Solo Silvia)</button>
+        </div>
+
+        <section id="quote-history" class="card no-print">
+            <div class="flex-row" style="justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h2>Historial de Cotizaciones</h2>
+                <button id="clear-history-btn" class="btn-danger-sm" style="padding: 0.5rem 1rem;">Borrar Todo</button>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>N°</th>
+                            <th>Cliente</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-body">
+                        <!-- Se llenará con JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer class="no-print">
+        <p>&copy; 2024 TechSoluciones CR. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
