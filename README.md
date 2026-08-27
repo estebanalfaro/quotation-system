@@ -3,8 +3,8 @@
 This is a simple web-based quotation system developed as part of my learning journey in AI-assisted programming and frontend development.
 
 ## 📌 Project Description
-This application allows users to simulate the creation of service or product quotations in a simple and interactive way.  
-It helps reduce manual calculation and improves the organization of quotation data.
+This application allows users to create service or product quotations in a simple and interactive way. 
+It helps reduce manual calculations, improves the organization of quotation data, and allows users to export quotations as PDF files.
 
 ## 🧠 What I practiced in this project
 - Computational thinking
@@ -40,7 +40,6 @@ https://estebanalfaro.github.io/quotation-system/
 ## 🚀 Future improvements
 - Add database support
 - Improve UI design
-- Export quotations as PDF
 - Add user authentication
 
 ---
